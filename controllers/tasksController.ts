@@ -6,11 +6,11 @@ import { Task as TaskTypes } from "../types/";
 import { CustomError } from "../utils/errors";
 
 export const getAllTasks = async (req: Request, res: Response) => {
+  // add user/admin tasks later
   const [tasks] = (await pool.execute("SELECT * FROM `tasks`")) as [
     TaskTypes[],
     FieldPacket[]
   ];
-  // add user/admin tasks later
   res.json({ tasks });
   console.log("getAllTasks");
 };
