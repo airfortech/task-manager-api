@@ -18,9 +18,9 @@ export const getAllTasks = async (req: Request, res: Response) => {
 export const getTask = async (req: Request, res: Response) => {
   // add user/admin tasks later
   const id = req.params.id;
-  const [tasks] = (await pool.execute("SELECT * FROM `tasks` WHERE `id`=?", [
+  const [tasks] = (await pool.execute("SELECT * FROM `tasks` WHERE `id`=:id", {
     id,
-  ])) as [TaskTypes[], FieldPacket[]];
+  })) as [TaskTypes[], FieldPacket[]];
   const task = tasks[0];
   res.json({ task: task });
   console.log("getTask");
