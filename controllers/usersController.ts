@@ -2,10 +2,9 @@ import { Request, Response } from "express";
 import { User } from "../db/records/User.record";
 import { pool } from "../db/db";
 import { CustomError } from "../utils/errors";
-import { User as UserTypes } from "../types/user";
+import { User as UserTypes, UserLogin } from "../types/user";
 import { FieldPacket } from "mysql2";
-import jwt from "jsonwebtoken";
-import { ACCESS_TOKEN } from "../config/config";
+import { outdatedTokens } from "..";
 
 export const signup = async (req: Request, res: Response) => {
   console.log("signup");
@@ -55,12 +54,16 @@ export const login = async (req: Request, res: Response) => {
     login: user.login,
     isAdmin: user.isAdmin,
   };
-  const token = jwt.sign(payload, ACCESS_TOKEN, { expiresIn: "9s" });
+  const token = User.createToken(payload, "27s");
 
   res.json({ token });
 };
 
 export const logout = async (req: Request, res: Response) => {
   console.log("logout");
-  res.json({ logout: "ok" });
+  const token = req.body.token;
+  if (token && outdatedTokens.indexOf(token) === -1) outdatedTokens.push(token);
+
+  // change res
+  res.json({ tokens: outdatedTokens });
 };

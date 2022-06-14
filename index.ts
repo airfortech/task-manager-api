@@ -7,6 +7,8 @@ import { usersRoutes } from "./routes/users";
 
 const app = express();
 
+export const outdatedTokens: string[] = [];
+
 app.use(cors());
 app.use(json());
 

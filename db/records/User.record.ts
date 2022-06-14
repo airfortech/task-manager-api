@@ -1,9 +1,11 @@
-import { User as UserTypes } from "../../types/user";
+import { User as UserTypes, UserLogin } from "../../types/user";
 import { CustomError } from "../../utils/errors";
 import { v4 as uuid } from "uuid";
 import { hash, compare } from "bcrypt";
 import { pool } from "../db";
 import { FieldPacket } from "mysql2";
+import jwt from "jsonwebtoken";
+import { ACCESS_TOKEN } from "../../config/config";
 
 export class User implements UserTypes {
   id: string;
@@ -71,5 +73,23 @@ export class User implements UserTypes {
   ): Promise<boolean> {
     console.log(password, hash);
     return await compare(password, hash);
+  }
+
+  static createToken(user: UserLogin, time: string | number): string {
+    const payload = {
+      id: user.id,
+      login: user.login,
+      isAdmin: user.isAdmin,
+    };
+    return jwt.sign(payload, ACCESS_TOKEN, { expiresIn: time });
+  }
+
+  static verifyToken(token: string) {
+    try {
+      const userData = jwt.verify(token, ACCESS_TOKEN);
+      return userData;
+    } catch (error) {
+      throw new CustomError("Wrong token", 401);
+    }
   }
 }
