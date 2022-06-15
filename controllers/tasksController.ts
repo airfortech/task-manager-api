@@ -2,15 +2,16 @@ import { Request, Response } from "express";
 import { FieldPacket } from "mysql2";
 import { pool } from "../db/db";
 import { Task } from "../db/records/Task.record";
-import { Task as TaskTypes } from "../types/";
+import { authRequest, Task as TaskTypes } from "../types/";
 import { CustomError } from "../utils/errors";
 
-export const getAllTasks = async (req: Request, res: Response) => {
-  // add user/admin tasks later
-  const [tasks] = (await pool.execute("SELECT * FROM `tasks`")) as [
-    TaskTypes[],
-    FieldPacket[]
-  ];
+export const getAllTasks = async (req: authRequest, res: Response) => {
+  const { id, isAdmin } = req.user;
+  let query = "SELECT * FROM `tasks` WHERE `userId`=:id";
+  if (isAdmin) query = "SELECT * FROM `tasks`";
+  const [tasks] = (await pool.execute(query, {
+    id,
+  })) as [TaskTypes[], FieldPacket[]];
   res.json({ tasks });
   console.log("getAllTasks");
 };

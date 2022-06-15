@@ -6,6 +6,7 @@ import { pool } from "../db";
 import { FieldPacket } from "mysql2";
 import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN } from "../../config/config";
+import { outdatedTokens } from "../..";
 
 export class User implements UserTypes {
   id: string;
@@ -86,10 +87,11 @@ export class User implements UserTypes {
 
   static verifyToken(token: string) {
     try {
+      if (outdatedTokens.indexOf(token) > -1) throw new Error();
       const userData = jwt.verify(token, ACCESS_TOKEN);
       return userData;
     } catch (error) {
-      throw new CustomError("Wrong token", 401);
+      throw new CustomError("You have no permission to access", 403);
     }
   }
 }

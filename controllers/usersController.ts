@@ -54,16 +54,16 @@ export const login = async (req: Request, res: Response) => {
     login: user.login,
     isAdmin: user.isAdmin,
   };
-  const token = User.createToken(payload, "27s");
+  const token = User.createToken(payload, "1h");
 
   res.json({ token });
 };
 
 export const logout = async (req: Request, res: Response) => {
   console.log("logout");
-  const token = req.body.token;
+  const token = req.headers.authorization.split(" ")[1];
   if (token && outdatedTokens.indexOf(token) === -1) outdatedTokens.push(token);
 
   // change res
-  res.json({ tokens: outdatedTokens });
+  res.status(302).json({ tokens: outdatedTokens });
 };
