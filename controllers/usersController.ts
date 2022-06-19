@@ -7,7 +7,6 @@ import { FieldPacket } from "mysql2";
 import { outdatedTokens } from "..";
 
 export const signup = async (req: Request, res: Response) => {
-  console.log("signup");
   const user = new User(req.body);
   user.createId();
   await user.validate();
@@ -28,7 +27,6 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  console.log("login");
   const userData: UserTypes = req.body;
   if (!userData.login || !userData.password)
     throw new CustomError("Login and password cant be empty", 401);
@@ -54,16 +52,14 @@ export const login = async (req: Request, res: Response) => {
     login: user.login,
     isAdmin: user.isAdmin,
   };
-  const token = User.createToken(payload, "1h");
+  const token = User.createToken(payload, "5d");
 
   res.json({ token });
 };
 
 export const logout = async (req: Request, res: Response) => {
-  console.log("logout");
   const token = req.headers.authorization.split(" ")[1];
   if (token && outdatedTokens.indexOf(token) === -1) outdatedTokens.push(token);
 
-  // change res
-  res.status(302).json({ tokens: outdatedTokens });
+  res.json({ success: true });
 };

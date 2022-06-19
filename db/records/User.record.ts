@@ -72,7 +72,6 @@ export class User implements UserTypes {
     password: string,
     hash: string
   ): Promise<boolean> {
-    console.log(password, hash);
     return await compare(password, hash);
   }
 
