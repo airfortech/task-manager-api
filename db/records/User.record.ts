@@ -12,7 +12,8 @@ export class User implements UserTypes {
   id: string;
   login: string;
   password: string;
-  email: string | any;
+  // email: string | any;
+  email: string;
   isAdmin: boolean;
 
   constructor({ id, login, password, email, isAdmin = false }: UserTypes) {
