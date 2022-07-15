@@ -104,8 +104,6 @@ Build app:
 
 ## API Requests
 
-<br>
-
 ### Signup:
 
 `GET localhost:3001/api/user/signup`
