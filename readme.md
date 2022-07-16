@@ -37,7 +37,7 @@ https://www.npmjs.com/package/mysql2
 - JWT Authentication
 - admin/user roles
 - users can create/update/delete/get own tasks
-- admin additionaly can update/delete/get tasks of all users
+- admin additionally can update/delete/get tasks of all users
 
 <br>
 
