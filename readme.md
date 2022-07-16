@@ -28,6 +28,9 @@ https://www.npmjs.com/package/uuid
 mysql2
 https://www.npmjs.com/package/mysql2
 
+cors
+https://www.npmjs.com/package/cors
+
 <br>
 
 ## Features
